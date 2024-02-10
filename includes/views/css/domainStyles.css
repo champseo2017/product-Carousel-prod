@@ -1,0 +1,118 @@
+/* CSS สำหรับคลาสที่มี prefix 'domain-' */
+.domain-wrap {
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.domain-heading {
+  font-size: 1.5rem; /* แทน text-2xl */
+  font-weight: bold; /* แทน font-bold */
+  margin-bottom: 1.5rem; /* แทน mb-6 */
+}
+
+.domain-card {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.domain-card-title {
+  font-size: 1.125rem; /* แทน text-lg */
+  font-weight: 600; /* แทน font-semibold */
+  margin-bottom: 0.5rem; /* แทน mb-2 */
+}
+
+.domain-card-text {
+  color: #4a5568; /* แทน text-gray-600 */
+  font-size: 1.2rem;
+}
+
+/* CSS สำหรับแบบฟอร์ม card ที่มี prefix 'domain-' */
+.domain-form {
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1rem;
+}
+
+/* CSS สำหรับ container ที่มี ID 'domains-container' และมี prefix 'domain-' */
+#domains-container.domain-container {
+  margin-bottom: 1rem; /* แทน mb-4 */
+  /* ตัวอย่างเพิ่มเติมของสไตล์ชีต, เช่น การตั้งค่าพื้นหลัง, ขอบ, เงา, ฯลฯ */
+  background-color: #f9f9f9;
+  /* border: 1px solid #eaeaea; */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  padding: 1rem;
+  /* border-radius: 0.25rem; */
+}
+
+/* CSS สำหรับ domain entry ที่มี prefix 'domain-' */
+.domain-entry {
+  margin-bottom: 0.5rem; /* แทน mb-2 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem; /* แทน py-2 px-3 */
+}
+
+.domain-input {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  color: #4a5568;
+}
+
+.domain-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.6);
+}
+
+.domain-entry button {
+  color: #f56565; /* แทน text-red-500 */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* CSS สำหรับปุ่ม Add Domain ที่มี prefix 'domain-' */
+.domain-add-button {
+  background-color: #4299e1; /* แทน bg-blue-500 */
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem; /* แทน py-2 px-4 */
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.domain-add-button:hover {
+  background-color: #2b6cb0; /* แทน hover:bg-blue-700 */
+}
+
+/* CSS สำหรับปุ่ม Submit ที่มี prefix 'domain-' */
+.domain-submit-button {
+  background-color: #4299e1; /* หรือสีอื่นตามต้องการ */
+  color: white;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.domain-submit-button:hover {
+  background-color: #2b6cb0; /* หรือเปลี่ยนเป็นสีอื่นเมื่อ hover */
+}
