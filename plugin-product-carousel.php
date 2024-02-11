@@ -1,11 +1,12 @@
 <?php
 /**
-* Plugin Name: Product Carousel
-* Description: An elegant and dynamic product carousel plugin for showcasing items in an interactive slider format. Ideal for e-commerce websites, this plugin offers a sleek and user-friendly way to display products attractively.
+* Plugin Name: Dynamic Showcase Carousel
+* Description: Elevate your e-commerce experience with the Dynamic Showcase Carousel, designed to elegantly present your products in an interactive slider. This plugin is the perfect solution for any e-commerce site looking to enhance visual appeal and user engagement. With its sleek design and easy-to-use interface, showcasing your products has never been more attractive or effective.
 * Version: 1.0
 * Author: Champion | Champion of User-Centric Web Solutions
-* Author URI: https://github.com/champseo2017/product-Carousel-prod
+* Author URI: https://github.com/champseo2017/dynamic-showcase-carousel
 */
+
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
