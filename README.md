@@ -1,42 +1,44 @@
-# Product Carousel Plugin for WordPress
+# Dynamic Showcase Carousel Plugin for WordPress
 
-Welcome to the Product Carousel plugin for WordPress, a sleek and dynamic solution designed to enhance your e-commerce website by showcasing your products in an interactive slider format. This plugin is ideal for any WordPress site owner looking to present products or items attractively and engagingly.
+Welcome to the Dynamic Showcase Carousel plugin for WordPress, your ultimate solution for elegantly showcasing your products in an interactive slider. Designed specifically for e-commerce websites, this plugin aims to enhance visual appeal and engage users with its dynamic presentation of products. Whether you're highlighting featured items, new arrivals, or specials, the Dynamic Showcase Carousel ensures your products are displayed attractively and effectively.
 
 ## Plugin Details
 
-- **Plugin Name:** Product Carousel
-- **Description:** An elegant and dynamic product carousel plugin for showcasing items in an interactive slider format. Ideal for e-commerce websites, this plugin offers a sleek and user-friendly way to display products attractively. Whether you're looking to highlight featured products, new arrivals, or specific categories, Product Carousel makes it easy and stylish.
+- **Plugin Name:** Dynamic Showcase Carousel
+- **Description:** Elevate your e-commerce experience with the Dynamic Showcase Carousel, designed to elegantly present your products in an interactive slider. This plugin is the perfect solution for any e-commerce site looking to enhance visual appeal and user engagement. With its sleek design and easy-to-use interface, showcasing your products has never been more attractive or effective.
 - **Version:** 1.0
 - **Author:** Champion | Champion of User-Centric Web Solutions
 - **Author URI:** [https://github.com/champseo2017/product-Carousel-prod](https://github.com/champseo2017/product-Carousel-prod)
+- **License:** GPLv2 or later
+- **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
 ## Features
 
-- **Dynamic Product Sliders:** Create responsive and interactive product sliders that showcase your best or selected products in a visually appealing manner.
-- **Easy to Customize:** Comes with a range of customization options to match your website’s theme and style.
-- **Responsive Design:** Ensures that your product carousel looks great on devices of all sizes, from mobile phones to desktop computers.
-- **User-Friendly Admin Panel:** A straightforward backend interface makes it easy to add, organize, and manage your product carousels without coding knowledge.
-- **Shortcode Support:** Easily embed product carousels on any page or post using a simple shortcode.
+- **Elegant Product Showcasing:** Create stunning, responsive sliders that make your products shine.
+- **Customization at Your Fingertips:** Tailor every aspect of your carousel to fit your website’s aesthetics.
+- **Fully Responsive:** Looks flawless on all devices, enhancing the shopping experience on tablets, phones, and desktops.
+- **Intuitive Admin Interface:** Easily set up and manage your carousels with our user-friendly backend, no coding required.
+- **Shortcode Integration:** Seamlessly integrate carousels into your pages or posts with simple shortcodes.
 
 ## Installation
 
-1. Download the Product Carousel plugin zip file.
-2. Log in to your WordPress admin panel.
+1. Download the Dynamic Showcase Carousel plugin zip file.
+2. Log into your WordPress dashboard.
 3. Navigate to **Plugins > Add New > Upload Plugin**.
-4. Choose the downloaded plugin zip file and click **Install Now**.
-5. After installation, activate the plugin through the 'Plugins' menu in WordPress.
-6. Use the provided shortcodes or the plugin settings page to configure your product carousels.
+4. Upload the downloaded zip file and click **Install Now**.
+5. Activate the plugin through the 'Plugins' menu.
+6. Head over to the Dynamic Showcase Carousel settings page to configure your first carousel.
 
 ## Usage
 
-After installation and activation, navigate to the Product Carousel settings page in your WordPress admin to create and customize your product sliders. You can insert carousels into your pages or posts using the generated shortcodes.
+Create and customize your product sliders via the Dynamic Showcase Carousel settings in your WordPress admin. Embed the sliders in your content with easy-to-use shortcodes provided by the plugin.
 
-For detailed instructions and customization options, please refer to the documentation provided within the plugin settings page.
+For comprehensive instructions and more on customization options, visit the plugin’s documentation section in the settings page.
 
 ## Support
 
-For support, feature requests, or bug reporting, please visit the [GitHub repository issues page](https://github.com/champseo2017/product-Carousel-prod/issues) or contact us directly through our Author URI.
+Need help? Have suggestions? Encounter an issue? Please visit our [GitHub repository](https://github.com/champseo2017/product-Carousel-prod/issues) for support and feedback.
 
-Thank you for choosing Product Carousel for your WordPress site. We hope you find it an invaluable tool for showcasing your products.
+Thank you for choosing Dynamic Showcase Carousel for your website. We're excited to be a part of your e-commerce journey!
 
 - The Champion Team
