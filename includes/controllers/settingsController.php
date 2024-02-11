@@ -13,6 +13,10 @@ class SettingsController {
         include plugin_dir_path( __FILE__ ) . '../views/domainView.php';
     }
 
+    public function howToUsePage() {
+        include plugin_dir_path( __FILE__ ) . '../views/howToUse.php';
+    }
+
     public function register_plugin_settings() {
         register_setting( 'plugin-settings-group', 'allowed_domains', array(
             'type' => 'array',

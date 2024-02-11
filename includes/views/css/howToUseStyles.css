@@ -1,0 +1,90 @@
+.domain-wrap {
+  max-width: 81rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.steps-wrap {
+  margin-top: 20px;
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap; /* Allow steps to wrap */
+  justify-content: center; /* Center steps */
+  gap: 10px; /* Add space between steps */
+  margin-bottom: 20px;
+}
+
+.step {
+  cursor: pointer;
+  padding: 10px 15px;
+  background-color: #b7b7b7;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-size: 1.2rem;
+  color: black;
+}
+
+.step:hover {
+  background-color: #ddd;
+}
+
+.step-content {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.step-content p {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.step-content-detail {
+  list-style-type: none;
+  padding: 0;
+}
+
+.step-content-detail li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.step-content-detail li:before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #4caf50;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.step-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.step.active {
+  background-color: #4caf50; /* Green background for active step */
+  color: white;
+}
+
+.step-content li {
+  font-size: 1.2rem;
+}

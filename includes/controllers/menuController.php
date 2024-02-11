@@ -7,24 +7,32 @@ class MenuController {
     public function __construct() {
         $this->settings = new SettingsController();
         $this->productCarousel = new ProductCarouselController();
-        // ลงทะเบียน action ที่จะเพิ่มหน้าเมนูในแอดมิน
+        // ลงทะเบียน action ที่จะเพิ่มหน้าเมนูในแอดมิน gg
         add_action( 'admin_menu', array( $this, 'add_plugin_settings_page' ) );
     }
 
     public function add_plugin_settings_page() {
         // เพิ่มหน้าเมนูใหม่ในแอดมินของ WordPress
         add_menu_page(
-            'Product Carousel Settings', // ชื่อหน้าเมนูที่จะแสดงในแอดมิน
-            'Product Carousel Settings', // ข้อความที่แสดงในแท็บเมนู
+            'How to Use', // ชื่อหน้าเมนูที่จะแสดงในแอดมิน
+            'Product Carousel', // ข้อความที่แสดงในแท็บเมนู
             'manage_options', // ความสามารถที่ผู้ใช้ต้องมีเพื่อเข้าถึงหน้าเมนูนี้
-            'domain-carousel-settings', // ชื่อเฉพาะของหน้าเมนู (slug)
-            array( $this, 'display_domain_settings_page' ), // ฟังก์ชันที่จะเรียกเมื่อหน้าเมนูถูกแสดง
+            'how-to-use', // ชื่อเฉพาะของหน้าเมนู (slug)
+            array( $this, 'display_how_to_use_page' ), // ฟังก์ชันที่จะเรียกเมื่อหน้าเมนูถูกแสดง
             'dashicons-admin-generic', // ไอคอนที่จะแสดงในเมนู
             20  // ตำแหน่งของเมนูในแอดมิน
         );
+        add_submenu_page(
+            'how-to-use',
+            'Product Carousel Settings',
+            'Product Carousel Settings',
+            'manage_options',
+            'domain-carousel-settings',
+            array( $this, 'display_domain_settings_page' ),
+        );
         // เพิ่ม submenu ที่ชื่อว่า "addNewCarousel"
         add_submenu_page(
-            'domain-carousel-settings', // ชื่อ slug ของเมนูหลัก
+            'how-to-use', // ชื่อ slug ของเมนูหลัก
             'Add New Carousel',        // ชื่อหน้าของ submenu
             'Add New Carousel',        // ข้อความที่แสดงในเมนู
             'manage_options',          // สิทธิ์ที่จำเป็นในการเข้าถึง submenu นี้
@@ -33,7 +41,7 @@ class MenuController {
         );
          // เพิ่ม submenu สำหรับการแสดงรายการ Carousel
         add_submenu_page(
-            'domain-carousel-settings',
+            'how-to-use',
             'List Carousel',
             'List Carousel',
             'manage_options',
@@ -81,6 +89,10 @@ class MenuController {
     public function display_domain_settings_page() {
        return $this->settings->add_plugin_settings_page();
     }
+
+    public function display_how_to_use_page() {
+        return $this->settings->howToUsePage();
+     }
 
     public function display_add_new_carousel_page() {
         return $this->productCarousel->addNewCarouselPage();

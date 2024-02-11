@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="<?php echo plugins_url('css/addCarouselStyles.css', __FILE__); ?>" rel="stylesheet">
 </head>
     <div class="addCarousel-container">
-        <h1 class="addCarousel-heading">เพิ่ม Product Carousel ใหม่</h1>
+        <h1 class="addCarousel-heading">Add New Product Carousel</h1>
         
         <?php if (!empty($error)): ?>
             <div class="addCarousel-error-container">

@@ -45,11 +45,16 @@ add_action( 'wp_enqueue_scripts', 'my_react_plugin_script' );
 
 
 function product_carousel_shortCode($atts) {
-    // Plugin_Logger::log_to_debug("product_carousel_shortCode" . json_encode($atts));
+
+    static $carousel_instance = 0;
+    $carousel_instance++;
+
     $attributes = shortcode_atts(array(
         'carousel_id' => '0',
     ), $atts);
 
-    return '<div id="my-react-app" data-carousel-id="' . esc_attr($attributes['carousel_id']) . '"></div>';
+    $output = '<div id="my-react-app-' . $carousel_instance . '" data-carousel-id="' . esc_attr($attributes['carousel_id']) . '"></div>';
+
+    return $output;
 }
 add_shortcode('product_carousel', 'product_carousel_shortCode');
