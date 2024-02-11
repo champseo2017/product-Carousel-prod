@@ -208,9 +208,9 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
         jQuery(document).ready(function($) {
         // กำหนดสถานะเมนู 'List Carousel' เป็นแอคทีฟ
         function setActiveMenu() {
-            $('#toplevel_page_domain-carousel-settings').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu');
-            $('#toplevel_page_domain-carousel-settings > a').addClass('wp-has-current-submenu');
-            $('#toplevel_page_domain-carousel-settings li a[href$="page=list-carousel"]').parent().addClass('current');
+            $('#toplevel_page_how-to-use').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu');
+            $('#toplevel_page_how-to-use > a').addClass('wp-has-current-submenu');
+            $('#toplevel_page_how-to-use li a[href$="page=list-carousel"]').parent().addClass('current');
         }
 
         setActiveMenu();

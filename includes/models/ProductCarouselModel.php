@@ -59,8 +59,15 @@ class ProductCarouselModel
     }
 
     public function addProductToCarousel($carouselId, $product_data) {
-        $existingProducts = get_post_meta($carouselId, 'product_details', true);
-        $existingProducts = $existingProducts ? json_decode($existingProducts, true) : [];
+    
+        $existingProductsMeta = get_post_meta($carouselId, 'product_details', true);
+        $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
+        $existingProducts = json_decode($existingProductsMeta, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+            return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+        }
 
         $image_url = $product_data['image'];
         // สร้าง ID ที่ไม่ซ้ำกันสำหรับผลิตภัณฑ์ โดยรวมกับ Unix timestamp
@@ -94,9 +101,15 @@ class ProductCarouselModel
     }
 
     public function updateProductToCarousel($carouselId, $productId, $product_data) {
-        
-        $existingProducts = get_post_meta($carouselId, 'product_details', true);
-        $existingProducts = $existingProducts ? json_decode($existingProducts, true) : [];
+
+        $existingProductsMeta = get_post_meta($carouselId, 'product_details', true);
+        $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
+        $existingProducts = json_decode($existingProductsMeta, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+            return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+        }
 
         // อัปเดตรูปภาพหากมีการอัปโหลดใหม่
         $image_url = $product_data['image'];
@@ -293,7 +306,7 @@ class ProductCarouselModel
             SELECT p.*, lang.meta_value AS 'language'
             FROM {$this->wpdb->posts} p
             LEFT JOIN {$this->wpdb->postmeta} lang ON p.ID = lang.post_id AND lang.meta_key = 'language'
-            WHERE p.post_type = 'product_carousel' AND p.ID = %d
+            WHERE p.post_type = 'product_carousel' AND p.ID = %d AND p.post_status = 'public'
         ";
         $carousel_prepared_query = $this->wpdb->prepare($carousel_query, $carouselId);
         $carousel_data = $this->wpdb->get_results($carousel_prepared_query);
@@ -362,12 +375,12 @@ class ProductCarouselModel
         // จัดรูปแบบ product_details
         $product_details = [];
         foreach ($product_details_result as $item) {
-            $details = json_decode($item->meta_value, true);
+            $stripped_value = stripslashes($item->meta_value);
+            $details = json_decode($stripped_value, true);
             if (is_array($details)) {
                 $product_details = array_merge($product_details, $details);
             }
         }
-    
         // นับจำนวน product_details
         $total = count($product_details);
     
@@ -384,6 +397,8 @@ class ProductCarouselModel
                 'product_details' => $product_details
             ];
         }
+
+      
     
         return [
             'data' => $carousels,
@@ -426,11 +441,23 @@ class ProductCarouselModel
 
     public function displayProductInCarousel($carouselId, $productId) {
         // ดึงข้อมูลผลิตภัณฑ์ที่มีอยู่ใน Carousel
-        $existingProducts = get_post_meta($carouselId, 'product_details', true);
-        $existingProducts = $existingProducts ? json_decode($existingProducts, true) : [];
+        $existingProductsMeta = get_post_meta($carouselId, 'product_details', true);
+        $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
+        $existingProducts = json_decode($existingProductsMeta, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+            return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+        }
+
+        if (!is_array($existingProducts)) {
+            // ตรวจสอบว่าข้อมูลหลังจาก decode เป็น array
+            return ['error' => 'Product details format is invalid'];
+        }
+
         // ค้นหาผลิตภัณฑ์ตาม productId
         foreach ($existingProducts as $product) {
-            if ($product['id'] === $productId) {
+            if (isset($product['id']) && $product['id'] === $productId) {
                 // คืนค่าข้อมูลผลิตภัณฑ์ที่พบ
                 return [
                     'success' => true,
@@ -438,6 +465,7 @@ class ProductCarouselModel
                 ];
             }
         }
+
         // ถ้าไม่พบผลิตภัณฑ์
         return ['error' => 'Product not found in Carousel'];
     }

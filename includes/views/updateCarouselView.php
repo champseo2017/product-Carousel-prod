@@ -10,6 +10,7 @@ $carouselData = [];
 
 $error = '';
 $success = '';
+$redirectUrl = '';
 function fetchCarouselData($controller, $carouselId) {
     $carouselData = $controller->handleGetCarouselData($carouselId);
     if (isset($carouselData['error'])) {
@@ -27,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else if (isset($result['success'])) {
         $success = $result['success'];
         $carouselId = $_POST['carouselId'];
+        $redirectUrl = admin_url('admin.php?page=list-carousel');
     }
 }
 
@@ -60,6 +62,11 @@ $status = isset($carouselData['data']['post_status']) ? $carouselData['data']['p
             <div class="addCarousel-success-container">
                 <p><?php echo $success; ?></p>
             </div>
+            <script type="text/javascript">
+            setTimeout(function() {
+                window.location.href = "<?php echo $redirectUrl; ?>";
+            }, 3000);
+        </script>
         <?php endif; ?>
 
         <form action="" method="post" class="addCarousel-form-container">
@@ -96,9 +103,9 @@ $status = isset($carouselData['data']['post_status']) ? $carouselData['data']['p
     jQuery(document).ready(function($) {
         // กำหนดสถานะเมนู 'List Carousel' เป็นแอคทีฟ
         function setActiveMenu() {
-            $('#toplevel_page_domain-carousel-settings').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu');
-            $('#toplevel_page_domain-carousel-settings > a').addClass('wp-has-current-submenu');
-            $('#toplevel_page_domain-carousel-settings li a[href$="page=list-carousel"]').parent().addClass('current');
+            $('#toplevel_page_how-to-use').removeClass('wp-not-current-submenu').addClass('wp-has-current-submenu');
+            $('#toplevel_page_how-to-use > a').addClass('wp-has-current-submenu');
+            $('#toplevel_page_how-to-use li a[href$="page=list-carousel"]').parent().addClass('current');
         }
 
         setActiveMenu();

@@ -36,7 +36,7 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
     <link href="<?php echo plugins_url('css/global.css', __FILE__); ?>" rel="stylesheet">
 </head>
     <div class="global-container">
-        <h1 class="global-heading">List Product Carousel</h1>
+        <h1 class="global-heading">List Carousel</h1>
         <?php if (!empty($errorDelete)): ?>
             <div class="global-error-container">
                 <p><?php echo $errorDelete; ?></p>
@@ -85,7 +85,10 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
                             <?php foreach ($data as $item): ?>
                                 <tr>
                                     <td><?php echo $rowNumber++; ?></td> <!-- แสดงหมายเลขแถวและเพิ่มขึ้นทีละหนึ่ง -->
-                                    <td><?php echo htmlspecialchars($item['id']); ?></td>
+                                    <td>
+                                        <?php echo htmlspecialchars($item['id']); ?>
+                                        <button onclick="copyText('<?php echo addslashes($item['id']); ?>')">Copy</button>
+                                    </td>
                                     <td><?php echo htmlspecialchars($item['title']); ?></td>
                                     <td><?php echo ucfirst(strtolower(htmlspecialchars($item['status']))); ?></td>
                                     <td><?php echo htmlspecialchars($item['date_created']); ?></td>
@@ -195,5 +198,16 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
 
         function submitDeleteForm() {
             document.getElementById('deleteForm').submit();
+        }
+
+        function copyText(text) {
+            // Create a temporary input
+            const input = document.createElement('input');
+            input.setAttribute('value', text);
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            alert("Copied: " + text);
         }
     </script>
