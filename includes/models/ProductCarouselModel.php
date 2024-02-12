@@ -64,10 +64,11 @@ class ProductCarouselModel
         $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
         $existingProducts = json_decode($existingProductsMeta, true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
-            return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
-        }
+
+        // if (json_last_error() !== JSON_ERROR_NONE) {
+        //     // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+        //     return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+        // }
 
         $image_url = $product_data['image'];
         // สร้าง ID ที่ไม่ซ้ำกันสำหรับผลิตภัณฑ์ โดยรวมกับ Unix timestamp
@@ -397,9 +398,7 @@ class ProductCarouselModel
                 'product_details' => $product_details
             ];
         }
-
-      
-    
+        // var_dump($carousels);
         return [
             'data' => $carousels,
             'total' => $total,
@@ -493,32 +492,37 @@ class ProductCarouselModel
 
     public function deleteProductDetails($carouselId, $productId) {
         // ดึง product_details จาก carousel
-        $existingProducts = get_post_meta($carouselId, 'product_details', true);
-        $existingProducts = $existingProducts ? json_decode($existingProducts, true) : [];
-
+        $existingProductsMeta = get_post_meta($carouselId, 'product_details', true);
+        $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
+        $existingProducts = $existingProductsMeta ? json_decode($existingProductsMeta, true) : [];
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+            return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+        }
+    
         // ค้นหารายการผลิตภัณฑ์ที่ต้องการลบ
+        $found = false;
         foreach ($existingProducts as $key => $product) {
             if ($product['id'] === $productId) {
-                // ลบรูปภาพถ้ามี
-                if (!empty($product['image'])) {
-                    $attachmentId = attachment_url_to_postid($product['image']);
-                    if ($attachmentId) {
-                        wp_delete_attachment($attachmentId, true);
-                    }
-                }
-
-                // ลบรายการจากอาร์เรย์
                 unset($existingProducts[$key]);
-                break;
+                $found = true;
+                break; // หยุดลูปเมื่อพบและลบผลิตภัณฑ์
             }
         }
-
-        // อัปเดต product_details ใน carousel
-        $result = update_post_meta($carouselId, 'product_details', json_encode(array_values($existingProducts)));
-
-        // ตรวจสอบและคืนค่าผลลัพธ์
+    
+        if (!$found) {
+            return ['error' => 'Product not found'];
+        }
+    
+        // หลังจากลบ ใช้ array_values สำหรับ re-index อาร์เรย์ เพื่อป้องกันโครงสร้างข้อมูล JSON เปลี่ยนไป
+        $updatedProducts = array_values($existingProducts);
+    
+        // อัปเดต product_details ใน carousel ใช้ JSON_UNESCAPED_UNICODE สำหรับรองรับ Unicode
+        $result = update_post_meta($carouselId, 'product_details', json_encode($updatedProducts, JSON_UNESCAPED_UNICODE));
+    
         if ($result === false) {
-            return ['error' => 'Error in deleting the product details'];
+            return ['error' => 'Error in updating the product details after deletion'];
         } else {
             return [
                 'success' => "Product details deleted successfully",
@@ -526,6 +530,7 @@ class ProductCarouselModel
             ];
         }
     }
+    
 
     private function convertUrlToPath($imageUrl) {
         $uploadDirs = wp_upload_dir();
