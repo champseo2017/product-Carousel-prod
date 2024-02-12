@@ -4,7 +4,7 @@
 * Description: Elevate your e-commerce experience with the Dynamic Showcase Carousel, designed to elegantly present your products in an interactive slider. This plugin is the perfect solution for any e-commerce site looking to enhance visual appeal and user engagement. With its sleek design and easy-to-use interface, showcasing your products has never been more attractive or effective.
 * Version: 1.0
 * Author: Champion | Champion of User-Centric Web Solutions
-* Author URI: https://github.com/champseo2017/product-Carousel-prod
+* Author URI: https://github.com/champseo2017/dynamic-showcase-carousel
 */
 
 
@@ -32,13 +32,13 @@ function my_react_plugin_script() {
     $script_files = scandir( $dir );
     foreach ( $script_files as $file ) {
         if ( preg_match( '/index.*\.js$/', $file ) ) {
-            wp_enqueue_script( 'my-react-plugin-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array( 'wp-element' ), filemtime( $dir . $file ), true );
+            wp_enqueue_script( 'dynamic-showcase-carousel-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array( 'wp-element' ), filemtime( $dir . $file ), true );
         }
     }
 
     foreach ( $script_files as $file ) {
         if ( preg_match( '/index.*\.css$/', $file ) ) {
-            wp_enqueue_style( 'my-react-plugin-style-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array(), filemtime( $dir . $file ) );
+            wp_enqueue_style( 'dynamic-showcase-carousel-style-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array(), filemtime( $dir . $file ) );
         }
     }
 }
