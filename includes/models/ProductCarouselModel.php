@@ -62,13 +62,17 @@ class ProductCarouselModel
     
         $existingProductsMeta = get_post_meta($carouselId, 'product_details', true);
         $existingProductsMeta = stripslashes($existingProductsMeta); // ลบการ escape อักขระ
-        $existingProducts = json_decode($existingProductsMeta, true);
-
-
-        // if (json_last_error() !== JSON_ERROR_NONE) {
-        //     // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
-        //     return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
-        // }
+        
+        // ตรวจสอบว่า existingProductsMeta ว่างหรือเป็น null
+        if (empty($existingProductsMeta)) {
+            $existingProducts = [];
+        } else {
+            $existingProducts = json_decode($existingProductsMeta, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                // จัดการข้อผิดพลาดในกรณีที่ json_decode ล้มเหลว
+                return ['error' => 'Failed to decode product details: ' . json_last_error_msg()];
+            }
+        }
 
         $image_url = $product_data['image'];
         // สร้าง ID ที่ไม่ซ้ำกันสำหรับผลิตภัณฑ์ โดยรวมกับ Unix timestamp
