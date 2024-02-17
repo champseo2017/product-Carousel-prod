@@ -115,7 +115,7 @@ if (!defined('ABSPATH')) {
                     <img src="<?php echo plugins_url('./assets/S3_12.png', __FILE__); ?>" alt="Add domain">
                 </div>
             </li>
-            <li>3: Use the Shortcode [product_carousel carousel_id="272"] on the desired post or page.
+            <li>3: Use the Shortcode [product_carousel carousel_id="307" product_ids="307-1135363167-1707739987"] on the desired post or page.
             <div>
                     <img src="<?php echo plugins_url('./assets/S3_13.png', __FILE__); ?>" alt="Add domain">
                 </div>

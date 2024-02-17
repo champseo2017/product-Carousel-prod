@@ -21,9 +21,18 @@ class ProductCarouselController {
             },
             'args' => [
                 'carouselId' => [
+                    'required' => true,
                     'validate_callback' => function($param, $request, $key) {
                         return is_numeric($param);
                     }
+                ],
+                'productIds' => [
+                    'required' => false,
+                    'validate_callback' => function($param) {
+                        // This pattern supports IDs like 307-1135363167-1707739987 or numeric IDs, separated by commas
+                        return preg_match('/^([\d-]+,)*[\d-]+$/', $param) || empty($param);
+                    },
+                    'default' => ''
                 ],
             ],
         ]);
@@ -31,9 +40,10 @@ class ProductCarouselController {
 
     public function getCarouselProducts($request) {
         $carouselId = $request['carouselId'];
-        $products = $this->model->listAllProductInCarousels($carouselId);
+        $productIds = $request['productIds'];
+        $products = $this->model->listAllProductInCarousels($carouselId, $productIds);
         if (empty($products)) {
-            return new WP_Error('no_products', 'No products found for the given carousel ID', ['status' => 200, ]);
+            return new WP_Error('no_products', 'No products found for the given carousel ID', ['status' => 200]);
         }
         return new WP_REST_Response($products, 200);
     }

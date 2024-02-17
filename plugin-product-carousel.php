@@ -27,18 +27,22 @@ add_action('plugins_loaded', function() {
 });
 
 function my_react_plugin_script() {
-    $dir = plugin_dir_path( __FILE__ ) . 'dist/assets/';
+    $script_dir = plugin_dir_path( __FILE__ ) . 'build/static/js/';
+    $style_dir = plugin_dir_path( __FILE__ ) . 'build/static/css/';
 
-    $script_files = scandir( $dir );
+    // Enqueue JS files
+    $script_files = scandir( $script_dir );
     foreach ( $script_files as $file ) {
-        if ( preg_match( '/index.*\.js$/', $file ) ) {
-            wp_enqueue_script( 'dynamic-showcase-carousel-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array( 'wp-element' ), filemtime( $dir . $file ), true );
+        if ( preg_match( '/main.*\.js$/', $file ) ) {
+            wp_enqueue_script( 'dynamic-showcase-carousel-' . $file, plugin_dir_url( __FILE__ ) . 'build/static/js/' . $file, array(), filemtime( $script_dir . $file ), true );
         }
     }
 
-    foreach ( $script_files as $file ) {
-        if ( preg_match( '/index.*\.css$/', $file ) ) {
-            wp_enqueue_style( 'dynamic-showcase-carousel-style-' . $file, plugin_dir_url( __FILE__ ) . 'dist/assets/' . $file, array(), filemtime( $dir . $file ) );
+    // Enqueue CSS files
+    $style_files = scandir( $style_dir );
+    foreach ( $style_files as $file ) {
+        if ( preg_match( '/main.*\.css$/', $file ) ) {
+            wp_enqueue_style( 'dynamic-showcase-carousel-style-' . $file, plugin_dir_url( __FILE__ ) . 'build/static/css/' . $file, array(), filemtime( $style_dir . $file ) );
         }
     }
 }
@@ -52,9 +56,10 @@ function product_carousel_shortCode($atts) {
 
     $attributes = shortcode_atts(array(
         'carousel_id' => '0',
+        'product_ids' => '',
     ), $atts);
 
-    $output = '<div id="my-react-app-' . $carousel_instance . '" data-carousel-id="' . esc_attr($attributes['carousel_id']) . '"></div>';
+    $output = '<div id="dynamic-showcase-' . $carousel_instance . '" data-carousel-id="' . esc_attr($attributes['carousel_id']) . '" data-product-ids="' . esc_attr($attributes['product_ids']) . '"></div>';
 
     return $output;
 }

@@ -305,8 +305,9 @@ class ProductCarouselModel
         ];
     }
 
-    public function listAllProductInCarousels($carouselId) {
-        // Query 1: ดึงรายละเอียดของ Carousel และภาษา
+    public function listAllProductInCarousels($carouselId, $productIds = '') {
+        // Plugin_Logger::log_to_debug("listAllProductInCarousels carouselId" . json_encode($carouselId));
+    
         $carousel_query = "
             SELECT p.*, lang.meta_value AS 'language'
             FROM {$this->wpdb->posts} p
@@ -315,8 +316,7 @@ class ProductCarouselModel
         ";
         $carousel_prepared_query = $this->wpdb->prepare($carousel_query, $carouselId);
         $carousel_data = $this->wpdb->get_results($carousel_prepared_query);
-
-        // Query 2: ดึง product_details
+    
         $product_details_query = "
             SELECT meta_value
             FROM {$this->wpdb->postmeta}
@@ -324,21 +324,21 @@ class ProductCarouselModel
         ";
         $product_details_prepared_query = $this->wpdb->prepare($product_details_query, $carouselId);
         $product_details_result = $this->wpdb->get_results($product_details_prepared_query);
-
-         // จัดรูปแบบ product_details
-         $product_details = [];
-         foreach ($product_details_result as $item) {
-             $details = json_decode($item->meta_value, true);
-             if (is_array($details)) {
-                 // Filter to keep only products with status 'public'
-                 $filtered_details = array_filter($details, function ($product) {
-                     return isset($product['status']) && $product['status'] == 'public';
-                 });
-                 $product_details = array_merge($product_details, $filtered_details);
-             }
-         }
-
-        // จัดการข้อมูล Carousel
+    
+        $product_ids_array = strlen(trim($productIds)) > 0 ? explode(',', $productIds) : [];
+    
+        $product_details = [];
+        foreach ($product_details_result as $item) {
+            $details = json_decode($item->meta_value, true);
+            if (is_array($details)) {
+                $filtered_details = empty($product_ids_array) ? $details : array_filter($details, function ($product) use ($product_ids_array) {
+                    return in_array($product['id'], $product_ids_array) && isset($product['status']) && $product['status'] == 'public';
+                });
+                $product_details = array_merge($product_details, $filtered_details);
+               
+            }
+        }
+    
         $carousels = [];
         foreach ($carousel_data as $carousel) {
             $carousels[] = [
@@ -351,10 +351,9 @@ class ProductCarouselModel
                 'product_details' => $product_details
             ];
         }
-
         return $carousels;
     }
-
+    
     public function listProductInCarousels($carouselId, $page = 1, $perPage = 10) {
         $offset = ($page - 1) * $perPage;
     
