@@ -5,6 +5,8 @@
 * Version: 1.0
 * Author: Champion | Champion of User-Centric Web Solutions
 * Author URI: https://github.com/champseo2017/product-Carousel-prod
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 
