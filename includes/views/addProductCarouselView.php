@@ -15,28 +15,53 @@ $error = '';
 $success = '';
 $redirectUrl = '';
 
+// Sanitize
+$uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRING);
+
+// Validate - ตรวจสอบว่า URI ไม่มีตัวอักษรที่ไม่พึงประสงค์หรืออาจอันตราย
+if (filter_var($uri, FILTER_VALIDATE_URL) || preg_match('/^\//', $uri)) {
+    $safe_uri = esc_url_raw($uri);
+} else {
+    // Handle invalid URI - จัดการในกรณี URI ไม่ผ่านการตรวจสอบ
+    $safe_uri = esc_url_raw('admin.php?page=how-to-use');
+}
+
 // ตรวจสอบว่ามีการส่งข้อมูลผ่าน POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['description'], $_POST['link'], $_POST['status'])) {
-    
-    $image_url = !empty($_POST['image_library_url']) ? $_POST['image_library_url'] : '';
 
-    $product_data = [
-        'title' => $_POST['title'],
-        'description' => $_POST['description'],
-        'link' => $_POST['link'],
-        'image' => $image_url,
-        'status' => $_POST['status']
-    ];
-
-    // เรียกใช้เมธอด addNewProductToCarousel
-    $result = $controller->addNewProductToCarousel($carouselId, $product_data);
-
-    if (isset($result['error'])) {
-        $error = $result['error'];
+    // ทำความสะอาดและตรวจสอบ nonce
+    if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['add_product_nonce'])), 'add_product_action')) {
+        $error = 'Security check failed.';
     } else {
-        $success =  "ID: " . $result['id'] . ", Title: " . $result['title'];
-         // ตั้งค่า URL สำหรับเปลี่ยนเส้นทาง
-        $redirectUrl = admin_url('admin.php?page=list-product-in-carousel&id=' . $carouselId);
+        $image_url = !empty($_POST['image_library_url']) ? esc_url_raw($_POST['image_library_url']) : '';
+
+        $product_data = [
+            // Sanitize และ Escape ข้อมูลที่รับมาเพื่อใช้ใน HTML หรือ Database
+            'title' => sanitize_text_field($_POST['title']),
+            'description' => sanitize_textarea_field($_POST['description']),
+            'link' => esc_url_raw($_POST['link']),
+            'image' => $image_url,
+            'status' => sanitize_key($_POST['status']) // ใช้สำหรับค่าที่คาดว่าจะเป็นอักขระ, ตัวเลข, หรือ _
+        ];
+    
+        // Validate ข้อมูลที่จำเป็นต้องมีความถูกต้องเฉพาะเจาะจง เช่น ตรวจสอบ URL หรือตัวเลข
+        // ตัวอย่างการตรวจสอบ URL ให้เป็น URL ที่ถูกต้อง
+        echo $product_data['link'];
+        if (!filter_var($product_data['link'], FILTER_VALIDATE_URL)) {
+            $error = 'Link is not a valid URL.';
+            
+        } else {
+            // เรียกใช้เมธอด addNewProductToCarousel
+            $result = $controller->addNewProductToCarousel($carouselId, $product_data);
+    
+            if (isset($result['error'])) {
+                $error = $result['error'];
+            } else {
+                $success =  "ID: " . $result['id'] . ", Title: " . esc_html($result['title']);
+                 // ตั้งค่า URL สำหรับเปลี่ยนเส้นทาง และ Escape URL ก่อนใช้งาน
+                $redirectUrl = esc_url_raw(admin_url('admin.php?page=list-product-in-carousel&id=' . $carouselId));
+            }
+        }
     }
 }
 
@@ -60,11 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
             <script type="text/javascript">
                 setTimeout(function() {
                     window.location.href = "<?php echo $redirectUrl; ?>";
-                }, 3000); // เปลี่ยนเส้นทางหลังจาก 5 วินาที
+                }, 1200);
             </script>
         <?php endif; ?>
 
-        <form action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post" enctype="multipart/form-data"  class="addCarousel-form-container">
+        <form action="<?php echo $safe_uri; ?>" method="post" enctype="multipart/form-data"  class="addCarousel-form-container">
+        <?php wp_nonce_field('add_product_action','add_product_nonce'); ?>
         <div class="addCarousel-container-form">
                 <label for="title" class="addCarousel-label">
                     ชื่อ สินค้า:
