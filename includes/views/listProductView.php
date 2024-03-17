@@ -29,6 +29,7 @@ $page = max(1, isset($_GET['pg']) ? (int)$_GET['pg'] : 1);
 $perPage = max(10, isset($_GET['totalPage']) ? (int)$_GET['totalPage'] : 10);
 
 $result = $controller->listProductInCarouselsPage();
+
 $jsonResult = json_encode($result);
 $htmlContent = '';
 
@@ -144,7 +145,7 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
                         <div class="pagination-total">
                             <!-- เพิ่มตัวเลือกสำหรับ totalPage -->
                             <div class="total-page-selector">
-                                <select name="totalPage" onchange="window.location.href='?page=list-carousel&pg=1&totalPage=' + this.value;" class="page-size-selector">
+                                <select name="totalPage" onchange="window.location.href='?page=list-product-in-carousel&id=<?php echo $carouselId; ?>&pg=1&totalPage=' + this.value;" class="page-size-selector">
                                     <option value="10" <?php echo $perPage == 10 ? 'selected' : ''; ?>>10 per page</option>
                                     <option value="25" <?php echo $perPage == 25 ? 'selected' : ''; ?>>25 per page</option>
                                     <option value="50" <?php echo $perPage == 50 ? 'selected' : ''; ?>>50 per page</option>
@@ -155,7 +156,7 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
                         </div>
                         <div class="pagination">
                             <?php if ($currentPage > 1): ?>
-                                <a href="?page=list-carousel&pg=<?php echo $currentPage - 1; ?>&totalPage=<?php echo $perPage; ?>" class="page-link">Previous</a>
+                                <a href="?page=list-product-in-carousel&id=<?php echo $carouselId; ?>&pg=<?php echo $currentPage - 1; ?>&totalPage=<?php echo $perPage; ?>" class="page-link">Previous</a>
                             <?php endif; ?>
 
                             <?php
@@ -163,22 +164,22 @@ $rowNumber = ($currentPage - 1) * $perPage + 1;
                             $endPage = min($totalPages, $currentPage + 4);
 
                             if ($startPage > 1) {
-                                echo '<a href="?page=list-carousel&pg=1&totalPage='.$perPage.'" class="page-link">1</a>';
+                                echo '<a href="?page=list-product-in-carousel&id=' . $carouselId . '&pg=1&totalPage='.$perPage.'" class="page-link">1</a>';
                                 echo '<span class="page-link">...</span>';
                             }
 
                             for ($i = $startPage; $i <= $endPage; $i++) {
-                                echo '<a href="?page=list-carousel&pg='.$i.'&totalPage='.$perPage.'" class="page-link '.($i == $currentPage ? 'active' : '').'">'.$i.'</a>';
+                                echo '<a href="?page=list-product-in-carousel&id=' . $carouselId . '&pg='.$i.'&totalPage='.$perPage.'" class="page-link '.($i == $currentPage ? 'active' : '').'">'.$i.'</a>';
                             }
 
                             if ($endPage < $totalPages) {
                                 echo '<span class="page-link">...</span>';
-                                echo '<a href="?page=list-carousel&pg='.$totalPages.'&totalPage='.$perPage.'" class="page-link">'.$totalPages.'</a>';
+                                echo '<a href="?page=list-product-in-carousel&id=' . $carouselId . '&pg='.$totalPages.'&totalPage='.$perPage.'" class="page-link">'.$totalPages.'</a>';
                             }
                             ?>
 
                             <?php if ($currentPage < $totalPages): ?>
-                                <a href="?page=list-carousel&pg=<?php echo $currentPage + 1; ?>&totalPage=<?php echo $perPage; ?>" class="page-link">Next</a>
+                                <a href="?page=list-product-in-carousel&id=<?php echo $carouselId; ?>&pg=<?php echo $currentPage + 1; ?>&totalPage=<?php echo $perPage; ?>" class="page-link">Next</a>
                             <?php endif; ?>
                         </div>
                     </div>

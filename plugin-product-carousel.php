@@ -22,6 +22,8 @@ add_action('plugins_loaded', function() {
     require_once plugin_dir_path( __FILE__ ) . 'includes/controllers/settingsController.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/helper/validation/carousel/carouselValidation.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/controllers/restApiController.php';
+    require_once plugin_dir_path( __FILE__ ) . 'includes/helper/validation/ValidationHelper.php';
+    require_once plugin_dir_path( __FILE__ ) . 'includes/helper/ClassInspector.php';
 
     $cors = new Plugin_CORS();
     $rest_api = new RestApiController();

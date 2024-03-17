@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
 class CarouselValidation {
     // ตรวจสอบความถูกต้องของข้อความ
     public static function validateText($text) {

@@ -351,6 +351,7 @@ class ProductCarouselModel
                 'product_details' => $product_details
             ];
         }
+       
         return $carousels;
     }
     
@@ -385,8 +386,15 @@ class ProductCarouselModel
                 $product_details = array_merge($product_details, $details);
             }
         }
+        
         // นับจำนวน product_details
         $total = count($product_details);
+
+        if ($total > 0) {
+            $product_details_paginated = array_slice($product_details, $offset, $perPage);
+        } else {
+            $product_details_paginated = [];
+        }
     
         // จัดการข้อมูล Carousel
         $carousels = [];
@@ -398,7 +406,7 @@ class ProductCarouselModel
                 'date_created' => $carousel->post_date,
                 'date_modified' => $carousel->post_modified,
                 'language' => $carousel->language,
-                'product_details' => $product_details
+                'product_details' => $product_details_paginated
             ];
         }
         // var_dump($carousels);

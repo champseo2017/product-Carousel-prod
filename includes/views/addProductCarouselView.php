@@ -3,12 +3,14 @@ if (!defined('ABSPATH')) {
     exit;
 }
 $controller = new ProductCarouselController();
+// $inspector = new ClassInspector('ValidationHelper');
+// $inspector->printMethods(); // Display all methods of the ValidationHelper class
 $screen = get_current_screen();
 if ( $screen->id == "admin_page_add-product-to-carousel" ) { 
     wp_enqueue_media();
 }
 
-// ดึง ID ของ Carousel
+// Retrieve the ID of the Carousel
 $carouselId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $error = '';
@@ -16,23 +18,20 @@ $success = '';
 $redirectUrl = '';
 
 // Sanitize
-$uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_SANITIZE_STRING);
+$uri = ValidationHelper::sanitizeUri('REQUEST_URI');
 
-// Validate - ตรวจสอบว่า URI ไม่มีตัวอักษรที่ไม่พึงประสงค์หรืออาจอันตราย
-if (filter_var($uri, FILTER_VALIDATE_URL) || preg_match('/^\//', $uri)) {
-    $safe_uri = esc_url_raw($uri);
+if (ValidationHelper::validateUri($uri)) {
+    $safe_uri = ValidationHelper::escUrl($uri);
 } else {
-    // Handle invalid URI - จัดการในกรณี URI ไม่ผ่านการตรวจสอบ
-    $safe_uri = esc_url_raw('admin.php?page=how-to-use');
+    $safe_uri = ValidationHelper::escUrl('admin.php?page=how-to-use');
 }
-
-// ตรวจสอบว่ามีการส่งข้อมูลผ่าน POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['description'], $_POST['link'], $_POST['status'])) {
-
-    // ทำความสะอาดและตรวจสอบ nonce
+$resultValidation = ValidationHelper::isPostRequestWithRequiredFields(['title', 'description', 'link', 'status', 'image_library_url']);
+// Check if data is submitted via POST
+if ($resultValidation === true) {
     if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['add_product_nonce'])), 'add_product_action')) {
         $error = 'Security check failed.';
     } else {
+        
         $image_url = !empty($_POST['image_library_url']) ? esc_url_raw($_POST['image_library_url']) : '';
 
         $product_data = [
@@ -63,6 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
             }
         }
     }
+} else if (is_array($resultValidation) && isset($resultValidation['error'])) {
+    if (!empty($resultValidation['missing_fields'])) {
+        $error = 'Missing fields: ' . implode(', ', $resultValidation['missing_fields']) . "<br>";
+    }
+    if (!empty($resultValidation['empty_fields'])) {
+        $error = 'Fields with empty values: ' . implode(', ', $resultValidation['empty_fields']) . "<br>";
+    }
 }
 
 ?>
@@ -82,11 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
             <div class="addCarousel-success-container">
                 <p><?php echo $success; ?></p>
             </div>
-            <script type="text/javascript">
+            <!-- <script type="text/javascript">
                 setTimeout(function() {
                     window.location.href = "<?php echo $redirectUrl; ?>";
                 }, 1200);
-            </script>
+            </script> -->
         <?php endif; ?>
 
         <form action="<?php echo $safe_uri; ?>" method="post" enctype="multipart/form-data"  class="addCarousel-form-container">
