@@ -5,9 +5,19 @@ if (!defined('ABSPATH')) {
 
 class ValidationHelper {
 
-    // Sanitizes a URI from the server input using a filter
-    public static function sanitizeUri($uri) {
-        return filter_input(INPUT_SERVER, $uri, FILTER_SANITIZE_STRING);
+    // Method to validate and sanitize 'id' from $_GET, returning an integer value
+    public static function getSanitizedId($param = 'id') {
+        return isset($_GET[$param]) ? intval($_GET[$param]) : 0;
+    }
+
+    public static function sanitizeUriSafely($uri) {
+        $rawValue = filter_input(INPUT_SERVER, $uri);
+        if (is_null($rawValue)) {
+            return ''; // Return an empty string or handle as needed if the URI is not set
+        }
+        // Apply a more appropriate sanitization method depending on your context
+        // Example for a general text without HTML tags
+        return filter_var($rawValue, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 
     // Validates a URI to ensure it is a proper URL or starts with a slash (/)
@@ -81,5 +91,57 @@ class ValidationHelper {
             return $error;
         }
         return ''; // Return an empty string if there's no error.
+    }
+
+    // Function to sanitize dynamic product data
+    public static function sanitizeProductData($product_data) {
+        $sanitized_data = [];
+        foreach ($product_data as $key => $value) {
+            switch ($key) {
+                case 'title':
+                    $sanitized_data[$key] = self::sanitizeTextField($value);
+                    break;
+                case 'description':
+                    $sanitized_data[$key] = self::sanitizeTextareaField($value);
+                    break;
+                case 'link':
+                    // Validate the URL before escaping
+                    if (self::validateProductUrl($value)) {
+                        $sanitized_data[$key] = self::escUrl($value);
+                    } else {
+                        $sanitized_data[$key] = ''; // Example default value or error handling
+                    }
+                    break;
+                case 'image':
+                    // Assuming $image_url is already sanitized
+                    $sanitized_data[$key] = $value;
+                    break;
+                case 'status':
+                    $sanitized_data[$key] = self::sanitizeKey($value);
+                    break;
+                default:
+                    // Optionally handle any keys not explicitly mentioned
+                    $sanitized_data[$key] = self::sanitizeTextField($value);
+            }
+        }
+        return $sanitized_data;
+    }
+    // Validates a URL from $product_data using FILTER_VALIDATE_URL
+    public static function validateProductUrl($url) {
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
+    }
+
+    public static function generateErrorMessage($resultValidation) {
+        $errorMessage = '';
+
+        if (!empty($resultValidation['missing_fields'])) {
+            $errorMessage .= 'Missing fields: ' . implode(', ', $resultValidation['missing_fields']) . "<br>";
+        }
+
+        if (!empty($resultValidation['empty_fields'])) {
+            $errorMessage .= 'Fields with empty values: ' . implode(', ', $resultValidation['empty_fields']) . "<br>";
+        }
+
+        return $errorMessage;
     }
 }

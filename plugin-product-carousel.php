@@ -24,10 +24,12 @@ add_action('plugins_loaded', function() {
     require_once plugin_dir_path( __FILE__ ) . 'includes/controllers/restApiController.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/helper/validation/ValidationHelper.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/helper/ClassInspector.php';
+    require_once plugin_dir_path( __FILE__ ) . 'includes/controllers/admin-script-style.php';
 
     $cors = new Plugin_CORS();
     $rest_api = new RestApiController();
     $menuPage = new MenuController();
+    new AdminScriptStyle();
 });
 
 function my_react_plugin_script() {
@@ -68,3 +70,4 @@ function product_carousel_shortCode($atts) {
     return $output;
 }
 add_shortcode('product_carousel', 'product_carousel_shortCode');
+

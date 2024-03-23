@@ -3,23 +3,38 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// ตรวจสอบว่ามีการส่งฟอร์มหรือไม่
+$controller = new ProductCarouselController();
 $error = '';
 $success = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $controller = new ProductCarouselController();
-    $result = $controller->addNewCarousel($_POST['title'], $_POST['language']);
+$formData = ValidationHelper::isPostRequestWithRequiredFields(['title', 'language']);
 
-    if (isset($result['error'])) {
-        $error = $result['error'];
-    } else if (isset($result['success'])) {
-        $success = $result['success'];
+$uri = ValidationHelper::sanitizeUriSafely('REQUEST_URI');
+if (ValidationHelper::validateUri($uri)) {
+    $safe_uri = ValidationHelper::escUrl($uri);
+} else {
+    $safe_uri = ValidationHelper::escUrl('admin.php?page=how-to-use');
+}
+
+if ($formData === true) {
+    if (!ValidationHelper::verifyNonce($_POST['add_carousel_nonce'], 'add_carousel_action')) {
+        $error = 'Security check failed.';
+    } else {
+        $title = ValidationHelper::sanitizeTextField($_POST['title']);
+        $language = ValidationHelper::sanitizeTextField($_POST['language']);
+        $result = $controller->addNewCarousel($title, $language);
+
+        if (isset($result['error'])) {
+            $error = $result['error'];
+        } else if (isset($result['success'])) {
+            $success = $result['success'];
+            $redirectUrl = ValidationHelper::escUrl(admin_url('admin.php?page=list-carousel'));
+        }
+
     }
+} else if (is_array($formData) && isset($formData['error'])) {
+    $error = ValidationHelper::generateErrorMessage($formData);
 }
 ?>
-<head>
-    <link href="<?php echo plugins_url('css/addCarouselStyles.css', __FILE__); ?>" rel="stylesheet">
-</head>
     <div class="addCarousel-container">
         <h1 class="addCarousel-heading">Add New Product Carousel</h1>
         
@@ -33,9 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="addCarousel-success-container">
                 <p><?php echo $success; ?></p>
             </div>
+            <?php AdminScriptStyle::performRedirection($redirectUrl, 800); ?>
         <?php endif; ?>
 
-        <form action="" method="post" class="addCarousel-form-container">
+        <form action="<?php echo $safe_uri; ?>" method="post" class="addCarousel-form-container">
+        <?php wp_nonce_field('add_carousel_action','add_carousel_nonce'); ?>
             <div class="addCarousel-container-form">
                 <label for="title" class="addCarousel-label">
                     ชื่อ Carousel:
